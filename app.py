@@ -49,14 +49,23 @@ def get_score():
     return str(Score.get())
 
 
+ROULETTE_WINRATE = 0.5
+
+
 @app.route("/roulette/")
 def roulette():
-    return render_template("roulette.html", score=Score.get())
+    return render_template("roulette.html", score=Score.get(), winrate=ROULETTE_WINRATE)
 
 
-@app.route("/roulette/spin/")
-def roulette_spin():
-    return ""
+@app.route("/roulette/spin/<int:bet>")
+def roulette_spin(bet: int):
+    if bet < 1 or bet > Score.get():
+        return "0"
+    if random.random() <= ROULETTE_WINRATE:
+        Score.add(bet)
+        return "1"
+    Score.add(-bet)
+    return "0"
 
 
 if __name__ == "__main__":
