@@ -23,18 +23,20 @@ def get_user_id():
     return id
 
 
-def get_score():
-    id = get_user_id()
-    return int(open(f"db/{id}").read())
+class Score:
+    @staticmethod
+    def get():
+        id = get_user_id()
+        return int(open(f"db/{id}").read())
 
+    @staticmethod
+    def set(x):
+        id = get_user_id()
+        open(f"db/{id}", "w").write(str(x))
 
-def set_score(x: int):
-    id = get_user_id()
-    open(f"db/{id}", "w").write(str(x))
-
-
-def add_score(x: int):
-    set_score(x+get_score())
+    @staticmethod
+    def add(x):
+        Score.set(x+Score.get())
 
 
 @app.route("/")
@@ -42,6 +44,20 @@ def index():
     return render_template("index.html", id=get_user_id())
 
 
+@app.route("/get-score/")
+def get_score():
+    return str(Score.get())
+
+
+@app.route("/roulette/")
+def roulette():
+    return render_template("roulette.html", score=Score.get())
+
+
+@app.route("/roulette/spin/")
+def roulette_spin():
+    return ""
+
+
 if __name__ == "__main__":
-    app.secret_key = "sk"
     app.run()
