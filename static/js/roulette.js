@@ -1,6 +1,6 @@
 let angle = 0;
 let speed = 0;
-let acc = -1;
+let acc = 1;
 
 $(function () {
   upd_score();
@@ -9,10 +9,10 @@ $(function () {
 });
 
 function upd_roulette() {
-  if (speed > 0 && speed + acc <= 0) {
+  if (speed > 0 && speed - acc <= 0) {
     upd_score();
   }
-  speed = Math.max(0, speed + acc);
+  speed = Math.max(0, speed - acc);
   angle += speed;
   angle %= 360;
   $("#roulette").css({ transform: `rotate(${angle}deg)` });
