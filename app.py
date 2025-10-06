@@ -39,8 +39,14 @@ def add_score(x: int):
 
 @app.route("/")
 def index():
-    return render_template("index.html", id=get_user_id())
+    add_score(1)
+    return render_template("index.html", score=get_score())
 
+
+@app.route("/roulete")
+def roulete():
+    set_score(100)
+    return render_template("roulete.html", score=get_score())
 
 if __name__ == "__main__":
     app.secret_key = "sk"
