@@ -25,6 +25,7 @@ function upd_score() {
 }
 
 function spin() {
+  //speed = sqrt( 2 * acceleration * (angle_2 - angle_1) )
   speed = 50
   bet = $("input").val();
   $.get(`/roulette/spin/${bet}`);
