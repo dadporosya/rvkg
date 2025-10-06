@@ -41,9 +41,16 @@ class Score:
 
 @app.route("/")
 def index():
-    return render_template("index.html", id=get_user_id())
+    add_score(1)
+    return render_template("index.html", score=get_score())
 
 
+<<<<<<< HEAD
+@app.route("/roulete")
+def roulete():
+    set_score(100)
+    return render_template("roulete.html", score=get_score())
+=======
 @app.route("/get-score/")
 def get_score():
     return str(Score.get())
@@ -67,6 +74,7 @@ def roulette_spin(bet: int):
     Score.add(-bet)
     return "0"
 
+>>>>>>> 8209cfec974b75fe73a4fa51e5a8a7ccd5a11f28
 
 if __name__ == "__main__":
     app.run()
