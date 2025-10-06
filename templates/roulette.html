@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/roulette.js') }}"></script>
 </head>
+
 <body>
     <header>
-        <div id="score">
-            {{ score }}
-        </div>
+        <div id="score"></div>
     </header>
 
     <div id="game">
         <label for="bet-input"></label>
         <input type="text" id="bet-input" placeholder="$0">
-
         <button id="bet-btn">Bet</button>
+        <div id="result"></div>
     </div>
 </body>
-<!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
-<script src="{{ url_for('static', filename='js/roulete.js') }}"></script>
 
 </html>

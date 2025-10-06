@@ -41,7 +41,6 @@ class Score:
 
 @app.route("/")
 def index():
-    add_score(1)
     return render_template("index.html", score=get_score())
 
 
