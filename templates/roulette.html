@@ -11,15 +11,17 @@
 
 <body>
     <header>
-        <div id="score"></div>
+        <a href="/">Menu</a>
+        <h1 id="score"></h1>
     </header>
     <div>
         <input type="number" id="bet_input" value="1" min="1">
         <button id="btn">SPIN</button>
     </div>
     <hr><hr><hr>
-    <div>
-        <img id="wheel" src="{{ roulette_image }}" style="pointer-events: none">
+    <div style="position: relative">
+        <img src="{{arrow_image}}" width="80" style="position: absolute;z-index:2;left:160px">
+        <canvas id="wheel" width="400" height="400" style="position: absolute;z-index:1;top:40px"></canvas>
     </div>
     
     

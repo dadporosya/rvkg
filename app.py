@@ -60,7 +60,14 @@ def roulette():
     return render_template("roulette.html",
                            score=Score.get(),
                            roulette_data=Markup(get_roulettes()),
-                           roulette_image=url_for("static", filename="r1.png"))
+                           arrow_image=url_for("static", filename="arrow.png"))
+
+
+EXPECTED_RETURN = 0.99
+
+
+def calculate_weights(sectors: list[int]):
+    pass
 
 
 @app.route("/roulette/spin/<string:roulette_name>/<int:bet>")
