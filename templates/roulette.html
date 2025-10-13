@@ -13,18 +13,19 @@
     <header>
         <div id="score"></div>
     </header>
-
-    <div id="game">
-        <label for="bet-input"></label>
-        <input type="text" id="bet-input" placeholder="$0">
-        <button id="bet-btn">Bet</button>
-        <div id="result"></div>
+    <div>
+        <input type="number" id="bet_input" value="1" min="1">
+        <button id="btn">SPIN</button>
     </div>
-    <div id="roulette" style="text-align:center;">roulette</div>
+    <hr><hr><hr>
+    <div>
+        <img id="wheel" src="{{ roulette_image }}" style="pointer-events: none">
+    </div>
+    
     
 </body>
 <script>
-    const winrate = {{ winrate }};
+    const roulette_data = {{ roulette_data }};
 </script>
 
 </html>

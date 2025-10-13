@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, url_for
+from markupsafe import Markup
 from datetime import timedelta
 import random
 from string import ascii_letters
 from uuid import uuid4
+import json
 
 app = Flask(__name__)
 app.secret_key = "sk"
@@ -49,23 +51,28 @@ def get_score():
     return str(Score.get())
 
 
-ROULETTE_WINRATE = 0.5
+def get_roulettes():
+    return json.load(open("roulettes.json"))
 
 
 @app.route("/roulette/")
 def roulette():
-    return render_template("roulette.html", score=Score.get(), winrate=ROULETTE_WINRATE)
+    return render_template("roulette.html",
+                           score=Score.get(),
+                           roulette_data=Markup(get_roulettes()),
+                           roulette_image=url_for("static", filename="r1.png"))
 
 
-@app.route("/roulette/spin/<int:bet>")
-def roulette_spin(bet: int):
-    if bet < 1 or bet > Score.get():
-        return "0"
-    if random.random() <= ROULETTE_WINRATE:
-        Score.add(bet)
-        return "1"
+@app.route("/roulette/spin/<string:roulette_name>/<int:bet>")
+def roulette_spin(roulette_name: str, bet: int):
+    sectors: list[int] = get_roulettes()[roulette_name]
+    if bet < 1 or bet > Score.get() or len(sectors) == 0:
+        return "-1"
     Score.add(-bet)
-    return "0"
+    i = random.randrange(len(sectors))
+    Score.add(bet*sectors[i])
+    res = str(i)
+    return res
 
 
 if __name__ == "__main__":

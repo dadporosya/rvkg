@@ -1,32 +1,72 @@
-let angle = 0;
-let speed = 0;
-let acc = 1;
+class Roulette {
+    #angle = 0;
+    #speed = 0;
+    #acceleration = 1;
+    #scoreToAdd = 0;
+
+    constructor(wheel, bet_input, btn, roulette_name, sectors) {
+        this.wheel = wheel;
+        this.bet_input = bet_input;
+        this.btn = btn;
+        this.roulette_name = roulette_name;
+        this.sectors = sectors;
+        setInterval(this.upd.bind(this), 10);
+        this.btn.on("click", this.spin.bind(this))
+    }
+
+    upd() {
+        if (this.#speed > 0 && this.#speed - this.#acceleration <= 0) {
+            this.handle_stop();
+        }
+        if (this.#speed > 0) {
+            this.#angle += (this.#speed + Math.max(0, this.#speed - this.#acceleration)) / 2 * Math.min(1, this.#speed / this.#acceleration);
+        }
+        while (this.#angle >= 360) {
+            this.#angle -= 360;
+        }
+        this.#speed = Math.max(0, this.#speed - this.#acceleration);
+        this.wheel.css({ rotate: `${this.#angle}deg` });
+    }
+
+    handle_stop() {
+        console.log("+" + `${this.#scoreToAdd}`);
+        score += this.#scoreToAdd;
+        this.#scoreToAdd = 0;
+        this.btn.show();
+    }
+
+    spin() {
+        let bet = this.bet_input.val();
+        if (this.#speed > 0 && bet > score) return;
+        score -= bet;
+        this.btn.hide();
+        var i;
+        $.ajax({
+            url: `/roulette/spin/${this.roulette_name}/${bet}`,
+            async: false,
+            success: function (data) {
+                i = Number(data);
+            }
+        });
+        this.#scoreToAdd = bet * this.sectors[i];
+        let new_angle = (360.0 / this.sectors.length) * (i + Math.random());
+
+        new_angle += 360 * (2 + Math.floor(Math.random() * 4));
+        console.log(new_angle);
+        this.#speed = Math.sqrt(2 * this.#acceleration * (new_angle - this.#angle));
+    }
+}
+
+let score = 0;
 
 $(function () {
-  upd_score();
-  $("button").on("click", spin)
-  setInterval(upd_roulette, 10);
+    $.get("/get-score", function (data) {
+        score = Number(data);
+    })
+    setInterval(upd_score, 10);
+    roulette = new Roulette($("#wheel"), $("#bet_input"), $("#btn"), "r", roulette_data["r"]);
 });
 
-function upd_roulette() {
-  if (speed > 0 && speed - acc <= 0) {
-    upd_score();
-  }
-  speed = Math.max(0, speed - acc);
-  angle += speed;
-  angle %= 360;
-  $("#roulette").css({ transform: `rotate(${angle}deg)` });
-}
-
 function upd_score() {
-  $.get(`/get-score`, function (data, status) {
-    $("#score").html(data);
-  });
-}
-
-function spin() {
-  //speed = sqrt( 2 * acceleration * (angle_2 - angle_1) )
-  speed = 50
-  bet = $("input").val();
-  $.get(`/roulette/spin/${bet}`);
+    $("#score").html(score);
 }
